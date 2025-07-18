@@ -15,5 +15,8 @@ dev = [
     "ruff>=0.12.4",
 ]
 
+[tool.uv]
+package=true
+
 [project.scripts]
 simple = "simple_agent:app"

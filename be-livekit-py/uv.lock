@@ -117,7 +117,7 @@ wheels = [
 [[package]]
 name = "be-livekit-py"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "livekit-agents", extra = ["bey", "google", "openai"] },
     { name = "livekit-plugins-noise-cancellation" },
