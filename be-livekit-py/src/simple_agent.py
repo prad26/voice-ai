@@ -1,13 +1,7 @@
 from dotenv import load_dotenv
-
 from livekit import agents
-from livekit.agents import AgentSession, Agent, RoomInputOptions
-from livekit.plugins import (
-    noise_cancellation,
-    openai,
-    google,
-    bey,
-)
+from livekit.agents import Agent, AgentSession, RoomInputOptions
+from livekit.plugins import noise_cancellation, openai
 
 load_dotenv()
 
@@ -15,13 +9,13 @@ load_dotenv()
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="You are a helpful voice AI assistant.",
+            instructions='You are a helpful voice AI assistant.',
         )
 
 
 async def entrypoint(ctx: agents.JobContext):
     session = AgentSession(
-        llm=openai.realtime.RealtimeModel(voice="coral"),
+        llm=openai.realtime.RealtimeModel(voice='coral'),
     )
 
     # session = AgentSession(
@@ -35,7 +29,7 @@ async def entrypoint(ctx: agents.JobContext):
     # )
 
     # avatar = bey.AvatarSession(
-    #     avatar_id="b9be11b8-89fb-4227-8f86-4a881393cbdb",  # ID of the Beyond Presence avatar to use
+    #     avatar_id="b9be11b8-89fb-4227-8f86-4a881393cbdb",
     # )
 
     # Start the avatar and wait for it to join
@@ -56,7 +50,7 @@ async def entrypoint(ctx: agents.JobContext):
     await ctx.connect()
 
     await session.generate_reply(
-        instructions="Greet the user and offer your assistance. Speak in japanese only.",
+        instructions='Greet the user and offer your assistance. Speak in japanese only.',
     )
 
 

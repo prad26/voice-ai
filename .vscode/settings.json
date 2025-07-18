@@ -1,4 +1,6 @@
 {
+  "editor.rulers": [100],
+
   // Enable Python linting and point to Ruff
   "python.linting.enabled": true,
   "python.linting.ruffEnabled": true,
