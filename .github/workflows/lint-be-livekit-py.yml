@@ -3,10 +3,10 @@ name: Lint LiveKit Python Backend
 on:
   push:
     paths:
-      - 'be-livekit-py/**'
+      - "be-livekit-py/**"
   pull_request:
     paths:
-      - 'be-livekit-py/**'
+      - "be-livekit-py/**"
 
 jobs:
   lint:
@@ -22,15 +22,19 @@ jobs:
         with:
           enable-cache: true
 
-      - name: "Set up Python"
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version-file: "./be-livekit-py/.python-version"
 
-      - name: Sync project venv
+      - name: Sync deps
         working-directory: be-livekit-py
         run: uv sync --locked --all-extras --dev
 
-      - name: Run Ruff lint
+      - name: Ruff check
         working-directory: be-livekit-py
         run: uv run ruff check --output-format=github .
+
+      - name: Type check
+        working-directory: be-livekit-py
+        run: uv run pyright
