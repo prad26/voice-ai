@@ -5,5 +5,10 @@ repos:
   hooks:
     # Run the linter.
     - id: ruff-check
+      files: ^be-livekit-py/
+      types: [file, python]
+
     # Run the formatter.
     - id: ruff-format
+      files: ^be-livekit-py/
+      types: [file, python]
