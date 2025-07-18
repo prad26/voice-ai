@@ -1,0 +1,19 @@
+[project]
+name = "be-livekit-py"
+version = "0.1.0"
+description = "AI Voice Agent with LiveKit"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "livekit-agents[bey,google,openai]>=1.2.1",
+    "livekit-plugins-noise-cancellation>=0.2.5",
+    "python-dotenv>=1.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.4",
+]
+
+[project.scripts]
+simple = "simple_agent:app"
