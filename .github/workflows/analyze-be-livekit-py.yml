@@ -1,4 +1,4 @@
-name: Lint LiveKit Python Backend
+name: Analyze LiveKit Python Backend
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - "be-livekit-py/**"
 
 jobs:
-  lint:
-    name: 🛠️ Lint via Ruff
+  analyze:
+    name: 🛠️ Analyze LiveKit Python Backend
     runs-on: ubuntu-latest
 
     steps:
