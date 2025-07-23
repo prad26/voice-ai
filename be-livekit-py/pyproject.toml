@@ -22,6 +22,7 @@ package = true
 
 [project.scripts]
 simple = "simple_agent:app"
+hasegawa = "agents.simple_hasegawa:app"
 
 [tool.pyright]
 venvPath = "."

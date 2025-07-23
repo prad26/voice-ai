@@ -1,21 +1,72 @@
 from dotenv import load_dotenv
 from livekit import agents
-from livekit.agents import Agent, AgentSession, RoomInputOptions
+from livekit.agents import (
+    Agent,
+    AgentSession,
+    ChatContext,
+    RoomInputOptions,
+    function_tool,
+    get_job_context,
+)
 from livekit.plugins import noise_cancellation, openai
 
 load_dotenv()
 
 
-class Assistant(Agent):
-    def __init__(self) -> None:
+class ConsentCollector(Agent):
+    def __init__(self):
         super().__init__(
-            instructions='You are a helpful voice AI assistant.',
+            instructions="""Your are a voice AI agent with the singular task to collect positive
+            recording consent from the user. If consent is not given, you must end the call."""
+        )
+
+    async def on_enter(self) -> None:
+        await self.session.generate_reply(
+            instructions='Ask the user: "May I record this call for quality assurance purposes?"'
+        )
+
+    @function_tool()
+    async def on_consent_given(self):
+        """Use this tool to indicate that consent has been given and the call may proceed."""
+
+        # Perform a handoff, immediately transfering control to the new agent
+        return Assistant(chat_ctx=self.session.history)
+
+    @function_tool()
+    async def end_call(self) -> None:
+        """Use this tool to indicate that consent has not been given and the call should end."""
+        await self.session.generate_reply(
+            instructions="""
+                Say "Thank you for your time, have a wonderful day.",
+                and then end the call.
+            """
+        )
+        job_ctx = get_job_context()
+        # delete the room to end the call
+        await job_ctx.room.disconnect()
+
+
+class Assistant(Agent):
+    def __init__(self, chat_ctx: ChatContext) -> None:
+        print(f'Creating assistant with chat context: {chat_ctx}')
+
+        super().__init__(
+            instructions="""
+                You are a helpful voice AI assistant.
+                You can speak only in English language.
+            """,
+            chat_ctx=chat_ctx,
+        )
+
+    async def on_enter(self) -> None:
+        await self.session.generate_reply(
+            instructions='Greet the user and offer your assistance in English language.'
         )
 
 
 async def entrypoint(ctx: agents.JobContext):
     session = AgentSession(
-        llm=openai.realtime.RealtimeModel(voice='coral'),
+        llm=openai.realtime.RealtimeModel(voice='ash'),
     )
 
     # session = AgentSession(
@@ -37,7 +88,7 @@ async def entrypoint(ctx: agents.JobContext):
 
     await session.start(
         room=ctx.room,
-        agent=Assistant(),
+        agent=ConsentCollector(),
         room_input_options=RoomInputOptions(
             # LiveKit Cloud enhanced noise cancellation
             # - If self-hosting, omit this parameter
@@ -49,9 +100,9 @@ async def entrypoint(ctx: agents.JobContext):
 
     await ctx.connect()
 
-    await session.generate_reply(
-        instructions='Greet the user and offer your assistance. Speak in japanese only.',
-    )
+    # await session.generate_reply(
+    #     instructions='Greet the user and offer your assistance. In english language.',
+    # )
 
 
 def app():
