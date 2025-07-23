@@ -29,7 +29,7 @@ class Languages(Enum):
         }[self]
 
 
-class HasegawaAgent(Agent):
+class HelpfulAgent(Agent):
     def __init__(self, language: Languages):
         super().__init__(
             instructions=f"""
@@ -82,7 +82,7 @@ async def entrypoint(ctx: agents.JobContext):
 
     await session.start(
         room=ctx.room,
-        agent=HasegawaAgent(language=agent_language),
+        agent=HelpfulAgent(language=agent_language),
         room_input_options=RoomInputOptions(
             # LiveKit Cloud enhanced noise cancellation
             # - If self-hosting, omit this parameter

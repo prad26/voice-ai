@@ -21,8 +21,8 @@ dev = [
 package = true
 
 [project.scripts]
-simple = "simple_agent:app"
-hasegawa = "agents.simple_hasegawa:app"
+simple = "agents.simple_agent:app"
+multi = "agents.multi_agent:app"
 
 [tool.pyright]
 venvPath = "."
