@@ -12,7 +12,11 @@ from livekit.agents import (
     WorkerOptions,
     cli,
 )
-from livekit.plugins import google, noise_cancellation, openai  # noqa: F401
+from livekit.plugins import (
+    google,  # type: ignore  # noqa: F401
+    noise_cancellation,
+    openai,
+)
 
 load_dotenv()
 
