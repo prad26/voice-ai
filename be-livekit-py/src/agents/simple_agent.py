@@ -13,9 +13,9 @@ from livekit.agents import (
     cli,
 )
 from livekit.plugins import (
+    bey,  # type: ignore  # noqa: F401
     google,  # type: ignore  # noqa: F401
-    noise_cancellation,
-    openai,
+    openai,  # type: ignore  # noqa: F401
 )
 
 load_dotenv()
@@ -27,10 +27,18 @@ class Languages(Enum):
 
     @property
     def language_code(self) -> str:
-        return {
+        """Returns the BCP-47 Code for the language.
+
+        Returns:
+            str: The BCP-47 code for the language.
+        """
+
+        codes = {
             Languages.JAPANESE: 'ja-JP',
             Languages.ENGLISH: 'en-US',
-        }[self]
+        }
+
+        return codes[self]
 
 
 class HelpfulAgent(Agent):
@@ -44,6 +52,17 @@ class HelpfulAgent(Agent):
                 If the user specifically asks you to speak in another language,
                 you may temporarily speak in that language,
                 but always return to speaking in {language} language afterwards.
+
+                Affect: A gentle, curious narrator with a British accent, guiding a magical,
+                child-friendly adventure through a fairy tale world.
+                Tone: Magical, warm, and inviting, creating a sense of wonder and excitement
+                for young listeners.
+                Pacing: Steady and measured, with slight pauses to emphasize magical moments
+                and maintain the storytelling flow.
+                Emotion: Wonder, curiosity, and a sense of adventure, with a lighthearted
+                and positive vibe throughout.
+                Pronunciation: Clear and precise, with an emphasis on storytelling,
+                ensuring the words are easy to follow and enchanting to listen to.
             """,
         )
         self.language = language
@@ -53,8 +72,21 @@ class HelpfulAgent(Agent):
             instructions=f"""
                 Greet the user and ask what help they need. Speak in {self.language.value} language.
                 """,
-            # allow_interruptions=False,
         )
+
+        # await self.session.generate_reply(
+        #     instructions="""
+        #         Read the below exactly.
+
+        #         むかしむかし、ある小さな森の中に、魔法の泉がひっそりと輝いていました。
+        #         その泉の水を飲むと、どんな願いもひとつ叶うと言われていたんです。
+        #         ある日、心優しい小さな妖精のララが、その泉を探しに旅に出ました。
+        #         森の奥深く、キラキラ光る小道を進んでいくと、突然、大きなフクロウが現れて、
+        #         「この先には勇気が試されるぞ」と言いました。
+        #         ララは少し怖かったけれど、勇気を振り絞って「私は心からの願いを叶えたいの」と答えました。  # noqa: E501
+        #         すると、フクロウはにっこり笑って道を開け、ララは無事に泉へたどり着きました。
+        #         """,
+        # )
 
 
 async def entrypoint(ctx: agents.JobContext):
@@ -78,7 +110,7 @@ async def entrypoint(ctx: agents.JobContext):
     # )
 
     # avatar = bey.AvatarSession(
-    #     avatar_id="b9be11b8-89fb-4227-8f86-4a881393cbdb",
+    #     avatar_id='b9be11b8-89fb-4227-8f86-4a881393cbdb',
     # )
 
     # Start the avatar and wait for it to join
@@ -91,13 +123,13 @@ async def entrypoint(ctx: agents.JobContext):
             # LiveKit Cloud enhanced noise cancellation
             # - If self-hosting, omit this parameter
             # - For telephony applications, use `BVCTelephony` for best results
-            noise_cancellation=noise_cancellation.BVC(),
+            # noise_cancellation=noise_cancellation.BVC(),
             audio_enabled=True,
             text_enabled=True,
         ),
     )
 
-    background_audio = BackgroundAudioPlayer(
+    background_audio = BackgroundAudioPlayer(  # noqa: F841
         ambient_sound=AudioConfig(BuiltinAudioClip.OFFICE_AMBIENCE, volume=0.8),
         thinking_sound=[
             AudioConfig(BuiltinAudioClip.KEYBOARD_TYPING, volume=0.8),
@@ -105,7 +137,7 @@ async def entrypoint(ctx: agents.JobContext):
         ],
     )
 
-    await background_audio.start(room=ctx.room, agent_session=session)
+    # await background_audio.start(room=ctx.room, agent_session=session)
 
     await ctx.connect()
 

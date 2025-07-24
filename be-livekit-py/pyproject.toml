@@ -23,6 +23,7 @@ package = true
 [project.scripts]
 simple = "agents.simple_agent:app"
 multi = "agents.multi_agent:app"
+db = "agents.db_control:app"
 
 [tool.pyright]
 venvPath = "."
