@@ -41,7 +41,7 @@ exclude = [
 
 reportMissingImports = true         # catch imports that can’t be resolved :contentReference[oaicite:4]{index=4}
 reportUnusedImport = true           # flag unused imports :contentReference[oaicite:5]{index=5}
-reportUnusedVariable = true         # flag unused locals/vars :contentReference[oaicite:6]{index=6}
+reportUnusedVariable = false        # handled by ruff
 reportOptionalMemberAccess = true   # catch obj.foo when foo could be None
 reportOptionalSubscript = true      # catch x[“key”] when x could be None
 reportOptionalCall = true           # catch f() when f could be None
