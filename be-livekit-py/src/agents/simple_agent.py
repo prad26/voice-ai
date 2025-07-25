@@ -1,4 +1,7 @@
+import json
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
 
 from dotenv import load_dotenv
 from livekit import agents
@@ -52,17 +55,6 @@ class HelpfulAgent(Agent):
                 If the user specifically asks you to speak in another language,
                 you may temporarily speak in that language,
                 but always return to speaking in {language} language afterwards.
-
-                Affect: A gentle, curious narrator with a British accent, guiding a magical,
-                child-friendly adventure through a fairy tale world.
-                Tone: Magical, warm, and inviting, creating a sense of wonder and excitement
-                for young listeners.
-                Pacing: Steady and measured, with slight pauses to emphasize magical moments
-                and maintain the storytelling flow.
-                Emotion: Wonder, curiosity, and a sense of adventure, with a lighthearted
-                and positive vibe throughout.
-                Pronunciation: Clear and precise, with an emphasis on storytelling,
-                ensuring the words are easy to follow and enchanting to listen to.
             """,
         )
         self.language = language
@@ -74,23 +66,9 @@ class HelpfulAgent(Agent):
                 """,
         )
 
-        # await self.session.generate_reply(
-        #     instructions="""
-        #         Read the below exactly.
-
-        #         むかしむかし、ある小さな森の中に、魔法の泉がひっそりと輝いていました。
-        #         その泉の水を飲むと、どんな願いもひとつ叶うと言われていたんです。
-        #         ある日、心優しい小さな妖精のララが、その泉を探しに旅に出ました。
-        #         森の奥深く、キラキラ光る小道を進んでいくと、突然、大きなフクロウが現れて、
-        #         「この先には勇気が試されるぞ」と言いました。
-        #         ララは少し怖かったけれど、勇気を振り絞って「私は心からの願いを叶えたいの」と答えました。  # noqa: E501
-        #         すると、フクロウはにっこり笑って道を開け、ララは無事に泉へたどり着きました。
-        #         """,
-        # )
-
 
 async def entrypoint(ctx: agents.JobContext):
-    agent_language = Languages.JAPANESE
+    agent_language = Languages.ENGLISH
 
     session = AgentSession(
         llm=openai.realtime.RealtimeModel(
@@ -116,6 +94,25 @@ async def entrypoint(ctx: agents.JobContext):
     # Start the avatar and wait for it to join
     # await avatar.start(session, room=ctx.room)
 
+    async def write_transcript():
+        current_date = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+        project_root = Path(__file__).resolve().parent.parent.parent
+        tmp_dir = project_root / 'tmp'
+        tmp_dir.mkdir(exist_ok=True)
+        filename = tmp_dir / f'transcript_{ctx.room.name}_{current_date}.json'
+
+        with open(filename, 'w') as f:
+            job_data = {}
+            job_data['room_name'] = ctx.room.name
+            job_data['timestamp'] = current_date
+            job_data['job_metadata'] = ctx.job.metadata
+            job_data['chat_items'] = session.history.to_dict()['items']
+
+            json.dump(job_data, f, indent=2)
+
+    ctx.add_shutdown_callback(write_transcript)
+
     await session.start(
         room=ctx.room,
         agent=HelpfulAgent(language=agent_language),
@@ -138,8 +135,6 @@ async def entrypoint(ctx: agents.JobContext):
     )
 
     # await background_audio.start(room=ctx.room, agent_session=session)
-
-    await ctx.connect()
 
 
 def app():
