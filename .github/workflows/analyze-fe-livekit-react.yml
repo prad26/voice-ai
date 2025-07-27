@@ -26,13 +26,17 @@ jobs:
           cache: 'npm'
 
       - name: Install packages
+        working-directory: fe-livekit-react
         run: npm install --frozen-lockfile
 
       - name: Linter
+        working-directory: fe-livekit-react
         run: npm run lint
         
       - name: Type Check
+        working-directory: fe-livekit-react
         run: npm run check:types
 
       - name: Build
+        working-directory: fe-livekit-react
         run: npm run build
