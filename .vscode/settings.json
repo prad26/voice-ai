@@ -1,17 +1,13 @@
 {
   "editor.rulers": [100],
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always",
-    "source.organizeImports": "always"
-  },
-
-  // Enable Python linting and point to Ruff
-  "python.linting.enabled": true,
-  "python.linting.ruffEnabled": true,
-  "python.linting.flake8Enabled": false,
 
   "[python]": {
+    // Enable Python linting and point to Ruff
+    "python.linting.enabled": true,
+    "python.linting.ruffEnabled": true,
+    "python.linting.flake8Enabled": false,
+
+    "editor.formatOnSave": true,
     "editor.defaultFormatter": "charliermarsh.ruff",
 
     "editor.codeActionsOnSave": {
@@ -21,5 +17,58 @@
 
     "editor.insertSpaces": true,
     "editor.tabSize": 4
-  }
+  },
+
+  "omlet.rootPath": "fe-livekit-react",
+
+  "[typescriptreact]": {
+    // Disable the default formatter, use eslint instead
+    "editor.formatOnSave": false,
+
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "never"
+    }
+  },
+
+  "prettier.enable": false,
+
+  // Silent the stylistic rules in you IDE, but still auto fix them
+  // "eslint.rules.customizations": [
+  //   { "rule": "style/*", "severity": "off", "fixable": true },
+  //   { "rule": "format/*", "severity": "off", "fixable": true },
+  //   { "rule": "*-indent", "severity": "off", "fixable": true },
+  //   { "rule": "*-spacing", "severity": "off", "fixable": true },
+  //   { "rule": "*-spaces", "severity": "off", "fixable": true },
+  //   { "rule": "*-order", "severity": "off", "fixable": true },
+  //   { "rule": "*-dangle", "severity": "off", "fixable": true },
+  //   { "rule": "*-newline", "severity": "off", "fixable": true },
+  //   { "rule": "*quotes", "severity": "off", "fixable": true },
+  //   { "rule": "*semi", "severity": "off", "fixable": true }
+  // ],
+
+  // Enable eslint for all supported languages
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml",
+    "toml",
+    "xml",
+    "gql",
+    "graphql",
+    "astro",
+    "svelte",
+    "css",
+    "less",
+    "scss",
+    "pcss",
+    "postcss"
+  ]
 }
