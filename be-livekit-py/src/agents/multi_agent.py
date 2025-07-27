@@ -16,8 +16,10 @@ load_dotenv()
 class ConsentCollector(Agent):
     def __init__(self):
         super().__init__(
-            instructions="""Your are a voice AI agent with the singular task to collect positive
-            recording consent from the user. If consent is not given, you must end the call."""
+            instructions="""
+                Your are a voice AI agent with the singular task to collect positive
+                recording consent from the user. If consent is not given, you must end the call.
+            """
         )
 
     async def on_enter(self) -> None:
