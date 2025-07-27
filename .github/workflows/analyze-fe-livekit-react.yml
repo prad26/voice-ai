@@ -1,0 +1,38 @@
+name: 🔍 Analyze LiveKit React Frontend
+
+on:
+  push:
+    paths:
+      - "fe-livekit-react/**"
+  pull_request:
+    paths:
+      - "fe-livekit-react/**"
+
+jobs:
+  analyze:
+    name: 🔍 Analyze LiveKit React Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install packages
+        run: npm install --frozen-lockfile
+
+      - name: Linter
+        run: npm run lint
+        
+      - name: Type Check
+        run: npm run check:types
+
+      - name: Build
+        run: npm run build

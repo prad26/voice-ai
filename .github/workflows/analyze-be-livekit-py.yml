@@ -1,4 +1,4 @@
-name: Analyze LiveKit Python Backend
+name: 🔍 Analyze LiveKit Python Backend
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   analyze:
-    name: 🛠️ Analyze LiveKit Python Backend
+    name: 🔍 Analyze LiveKit Python Backend
     runs-on: ubuntu-latest
 
     steps:
