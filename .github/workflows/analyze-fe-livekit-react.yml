@@ -12,6 +12,9 @@ jobs:
   analyze:
     name: 🔍 Analyze LiveKit React Frontend
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fe-livekit-react
 
     steps:
       - name: Checkout
@@ -24,19 +27,16 @@ jobs:
         with:
           node-version-file: 'fe-livekit-react/.nvmrc'
           cache: 'npm'
+          cache-dependency-path: 'fe-livekit-react/package-lock.json'
 
       - name: Install packages
-        working-directory: fe-livekit-react
         run: npm install --frozen-lockfile
 
       - name: Linter
-        working-directory: fe-livekit-react
         run: npm run lint
-        
+
       - name: Type Check
-        working-directory: fe-livekit-react
         run: npm run check:types
 
       - name: Build
-        working-directory: fe-livekit-react
         run: npm run build
