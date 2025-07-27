@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: 'fe-livekit-react/.nvmrc'
           cache: 'npm'
 
       - name: Install packages
