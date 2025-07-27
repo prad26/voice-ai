@@ -55,7 +55,7 @@ class Assistant(Agent):
         super().__init__(
             instructions="""
                 You are a helpful voice AI assistant.
-                You can speak only in English language.
+                You can speak only in English language, unless the user requests otherwise.
             """,
             chat_ctx=chat_ctx,
         )

@@ -12,6 +12,9 @@ jobs:
   analyze:
     name: 🔍 Analyze LiveKit Python Backend
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: be-livekit-py
 
     steps:
       - name: Checkout repository
@@ -28,13 +31,10 @@ jobs:
           python-version-file: "./be-livekit-py/.python-version"
 
       - name: Sync deps
-        working-directory: be-livekit-py
         run: uv sync --locked --all-extras --dev
 
       - name: Ruff check
-        working-directory: be-livekit-py
         run: uv run ruff check --output-format=github .
 
       - name: Type check
-        working-directory: be-livekit-py
         run: uv run pyright
