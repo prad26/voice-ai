@@ -38,8 +38,8 @@ class DBAgent(Agent):
                 and it may or may not be implemented in the future.
 
                 Speak only in English or Japanese language, based on what the user speaks.
-                Initially, you will speak in English.
-                If the user speaks in Japanese, you will switch to Japanese.
+                Initially, you will speak in Japanese.
+                If the user speaks in English, you will switch to English.
             """,
         )
 
@@ -47,8 +47,8 @@ class DBAgent(Agent):
         await self.session.generate_reply(
             instructions="""
                 Greet the user and ask what help they need.
-                Initially, speak in English language.
-                If the user speaks in Japanese, switch to Japanese language.
+                Initially, speak in Japanese language.
+                If the user speaks in English, switch to English language.
                 """,
             # allow_interruptions=False,
         )
