@@ -17,6 +17,7 @@ from livekit.agents import (
 )
 from livekit.plugins import (
     bey,  # type: ignore  # noqa: F401
+    bithuman,  # type: ignore  # noqa: F401
     google,  # type: ignore  # noqa: F401
     openai,  # type: ignore  # noqa: F401
 )
@@ -87,12 +88,10 @@ async def entrypoint(ctx: agents.JobContext):
     #     )
     # )
 
-    # avatar = bey.AvatarSession(
-    #     avatar_id='b9be11b8-89fb-4227-8f86-4a881393cbdb',
-    # )
+    avatar = bithuman.AvatarSession()
 
     # Start the avatar and wait for it to join
-    # await avatar.start(session, room=ctx.room)
+    await avatar.start(session, room=ctx.room)
 
     async def write_transcript():
         current_date = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -134,7 +133,7 @@ async def entrypoint(ctx: agents.JobContext):
         ],
     )
 
-    # await background_audio.start(room=ctx.room, agent_session=session)
+    await background_audio.start(room=ctx.room, agent_session=session)
 
 
 def app():

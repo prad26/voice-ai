@@ -5,6 +5,9 @@ from livekit import agents
 from livekit.agents import (
     Agent,
     AgentSession,
+    AudioConfig,
+    BackgroundAudioPlayer,
+    BuiltinAudioClip,
     RoomInputOptions,
     ToolError,
     WorkerOptions,
@@ -13,6 +16,7 @@ from livekit.agents import (
     get_job_context,
 )
 from livekit.plugins import (
+    bithuman,  # type: ignore  # noqa: F401
     google,  # type: ignore  # noqa: F401
     openai,
 )
@@ -138,12 +142,10 @@ async def entrypoint(ctx: agents.JobContext):
     #     )
     # )
 
-    # avatar = bey.AvatarSession(
-    #     avatar_id="b9be11b8-89fb-4227-8f86-4a881393cbdb",
-    # )
+    avatar = bithuman.AvatarSession()
 
     # Start the avatar and wait for it to join
-    # await avatar.start(session, room=ctx.room)
+    await avatar.start(session, room=ctx.room)
 
     await session.start(
         room=ctx.room,
@@ -158,7 +160,15 @@ async def entrypoint(ctx: agents.JobContext):
         ),
     )
 
-    await ctx.connect()
+    background_audio = BackgroundAudioPlayer(  # noqa: F841
+        ambient_sound=AudioConfig(BuiltinAudioClip.OFFICE_AMBIENCE, volume=0.8),
+        thinking_sound=[
+            AudioConfig(BuiltinAudioClip.KEYBOARD_TYPING, volume=0.8),
+            AudioConfig(BuiltinAudioClip.KEYBOARD_TYPING2, volume=0.7),
+        ],
+    )
+
+    await background_audio.start(room=ctx.room, agent_session=session)
 
 
 def app():
